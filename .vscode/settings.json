@@ -1,8 +1,0 @@
-{
-    "files.associations": {
-        "cmath": "cpp",
-        "type_traits": "cpp",
-        "limits": "cpp",
-        "typeinfo": "cpp"
-    }
-}
