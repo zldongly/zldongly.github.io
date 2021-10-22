@@ -43,6 +43,9 @@ global queue为空时 随机去其他local queue抢一半
 MG执行完阻塞任务时找不到空闲P，G推到global queue  
 * 有1/61的概率去global queue取一些
 
+* 线程首次创建时会执行一个特殊的G(g0)  
+g0执行调度local queue，在两个goroutine之间切换
+
 ## syscall
 > 调syscall时解绑P，G阻塞  
 P暂时不调度给其他M  
@@ -68,3 +71,12 @@ M注册sigurg信号
 往运行指针PC中插一条指令  
 把G推到global queue中
 
+## channel调度
+* goroutine因channel被阻塞G被放在runnext中  
+G调度时不从local queue中取，先运行runnext中的G
+
+## goroutine recycle
+* 每一个P都维护一个local freelist
+* 全局维护两个  
+    * 一个包含栈 (2K)
+    * 一个不包含栈(没被GC扫描过)
